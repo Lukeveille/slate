@@ -31,37 +31,37 @@ This API documentation page was created with [Slate](https://github.com/lord/sla
 ```ruby
 require 'eventboard'
 
-api = Event Board::APIClient.authorize!('api-key')
+api = Event Board::APIClient.authorize!('json-web-token')
 ```
 
 ```python
 import eventboard
 
-api = eventboard.authorize('api-key')
+api = eventboard.authorize('json-web-token')
 ```
 
 ```shell
 # With shell, you can just pass the correct header with each request
 curl "api_endpoint_here"
-  -H "Authorization: api-key"
+  -H "Authorization: json-web-token"
 ```
 
 ```javascript
 const eventboard = require('eventboard');
 
-let api = eventboard.authorize('api-key');
+let api = eventboard.authorize('json-web-token');
 ```
 
-> Make sure to replace `"api-key"` with your API key.
+> Make sure to replace `"json-web-token"` the json web token sent on login.
 
-Event Board uses API keys to allow access to the API. You can register a new Event Board API key at our [developer portal](http://example.com/developers).
+Event Board uses json web tokens to authenticate users. You can register a new Event Board API key at our [developer portal](http://api.eventboard.com/developers).
 
 Event Board expects for the API key to be included in all API requests to the server in a header that looks like the following:
 
-`Authorization: api-key`
+`Authorization: json-web-token`
 
 <aside class="notice">
-You must replace <code>api-key</code> with your personal API key.
+You must replace <code>json-web-token</code> with the web token returned from the "/login" endpoint.
 </aside>
 
 # Events
@@ -71,26 +71,26 @@ You must replace <code>api-key</code> with your personal API key.
 ```ruby
 require 'eventboard'
 
-api = Event Board::APIClient.authorize!('api-key')
+api = Event Board::APIClient.authorize!('json-web-token')
 api.events.get
 ```
 
 ```python
 import eventboard
 
-api = eventboard.authorize('api-key')
+api = eventboard.authorize('json-web-token')
 api.events.get()
 ```
 
 ```shell
-curl --location --request POST "http://example.com/api/events"
-  --header "Authorization: api-key"
+curl --location --request POST "http://api.eventboard.com/api/events"
+  --header "Authorization: json-web-token"
 ```
 
 ```javascript
 const eventboard = require('eventboard');
 
-let api = eventboard.authorize('api-key');
+let api = eventboard.authorize('json-web-token');
 let events = api.events.get();
 ```
 
@@ -100,17 +100,25 @@ let events = api.events.get();
 [
   {
     "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
+    "name": "Ruby Meetup",
+    "description": "A meetup for Ruby developers of all skill levels.",
+    "start": 1566507630,
+    "end": 1569517650,
+    "lat": 43.638365132,
+    "long": -79.43534586,
+    "userId": 7,
+    "categoryId": 1,
   },
   {
     "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
+    "name": "Tech Networking Mixer",
+    "description": "A meetup for tech industry professionals",
+    "start": 1366507630,
+    "end": 1669517650,
+    "lat": 43.638561,
+    "long": -79.435548151,
+    "userId": 10,
+    "categoryId": 3,
   }
 ]
 ```
@@ -119,7 +127,7 @@ This endpoint retrieves all events.
 
 ### HTTP Request
 
-`GET http://example.com/api/events`
+`GET http://api.eventboard.com/api/events`
 
 ### Query Parameters
 
@@ -129,7 +137,7 @@ include_cats | false | If set to true, the result will also include cats.
 available | true | If set to false, the result will include events that have already been adopted.
 
 <aside class="success">
-Remember — a happy event is an authenticated event!
+Remember — a happy user is an authenticated user!
 </aside>
 
 ## Get a Specific Event
@@ -137,26 +145,26 @@ Remember — a happy event is an authenticated event!
 ```ruby
 require 'eventboard'
 
-api = Event Board::APIClient.authorize!('api-key')
+api = Event Board::APIClient.authorize!('json-web-token')
 api.events.get(2)
 ```
 
 ```python
 import eventboard
 
-api = eventboard.authorize('api-key')
+api = eventboard.authorize('json-web-token')
 api.events.get(2)
 ```
 
 ```shell
-curl "http://example.com/api/events/2"
-  -H "Authorization: api-key"
+curl "http://api.eventboard.com/api/events/2"
+  -H "Authorization: json-web-token"
 ```
 
 ```javascript
 const eventboard = require('eventboard');
 
-let api = eventboard.authorize('api-key');
+let api = eventboard.authorize('json-web-token');
 let max = api.events.get(2);
 ```
 
@@ -164,11 +172,15 @@ let max = api.events.get(2);
 
 ```json
 {
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
+  "id": 1,
+  "name": "Ruby Meetup",
+  "description": "A meetup for Ruby developers of all skill levels.",
+  "start": 1566507630,
+  "end": 1569517650,
+  "lat": 43.638365132,
+  "long": -79.43534586,
+  "userId": 7,
+  "categoryId": 1,
 }
 ```
 
@@ -178,7 +190,7 @@ This endpoint retrieves a specific event.
 
 ### HTTP Request
 
-`GET http://example.com/events/<ID>`
+`GET http://api.eventboard.com/events/<ID>`
 
 ### URL Parameters
 
@@ -191,27 +203,27 @@ ID | The ID of the event to retrieve
 ```ruby
 require 'eventboard'
 
-api = Event Board::APIClient.authorize!('api-key')
+api = Event Board::APIClient.authorize!('json-web-token')
 api.events.delete(2)
 ```
 
 ```python
 import eventboard
 
-api = eventboard.authorize('api-key')
+api = eventboard.authorize('json-web-token')
 api.events.delete(2)
 ```
 
 ```shell
-curl "http://example.com/api/events/2"
+curl "http://api.eventboard.com/api/events/2"
   -X DELETE
-  -H "Authorization: api-key"
+  -H "Authorization: json-web-token"
 ```
 
 ```javascript
 const eventboard = require('eventboard');
 
-let api = eventboard.authorize('api-key');
+let api = eventboard.authorize('json-web-token');
 let max = api.events.delete(2);
 ```
 
@@ -228,7 +240,7 @@ This endpoint deletes a specific event.
 
 ### HTTP Request
 
-`DELETE http://example.com/events/<ID>`
+`DELETE http://api.eventboard.com/events/<ID>`
 
 ### URL Parameters
 
